@@ -15,6 +15,7 @@ const (
 	stateSelector  = "selector"
 	stateConfig    = "config"
 	stateDashboard = "dashboard"
+	stateSend      = "send"
 	stateDone      = "done"
 	stateHelp      = "help"
 	stateExit      = "exit"
@@ -27,6 +28,7 @@ type LauncherModel struct {
 	selector      SelectorModel
 	config        ConfigModel
 	dashboard     Model
+	send          SendModel
 	width         int
 	height        int
 	helpOutput    string
@@ -55,6 +57,10 @@ func (m LauncherModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.dashboard.width > 0 || m.state == stateDashboard {
 			m.dashboard.width = msg.Width
 			m.dashboard.height = msg.Height
+		}
+		if m.send.width > 0 || m.state == stateSend {
+			m.send.width = msg.Width
+			m.send.height = msg.Height
 		}
 		return m, nil
 
@@ -135,6 +141,22 @@ func (m LauncherModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			return m, cmd
 
+		case stateSend:
+			sendModel, cmd := m.send.Update(msg)
+			if sm, ok := sendModel.(SendModel); ok {
+				m.send = sm
+			}
+
+			if m.send.quitting {
+				m.state = stateSelector
+				m.selector = NewSelectorModel()
+				m.selector.width = m.width
+				m.selector.height = m.height
+				return m, m.selector.Init()
+			}
+
+			return m, cmd
+
 		case stateHelp:
 			// Wait for any key press to exit
 			if keyMsg, ok := msg.(tea.KeyMsg); ok {
@@ -164,6 +186,8 @@ func (m LauncherModel) View() string {
 		return m.config.View()
 	case stateDashboard:
 		return m.dashboard.View()
+	case stateSend:
+		return m.send.View()
 	case stateHelp:
 		return m.helpOutput
 	case stateDone, stateExit:
@@ -184,13 +208,39 @@ func (m *LauncherModel) handleSelection() (tea.Model, tea.Cmd) {
 		m.config.height = m.height
 		return m, nil
 
+	case "📤 Send SMS":
+		// Load config and transition to send state
+		cfg, err := config.LoadConfig()
+		if err != nil {
+			m.state = stateSelector
+			m.selector = NewSelectorModel()
+			m.selector.width = m.width
+			m.selector.height = m.height
+			return m, m.selector.Init()
+		}
+
+		if err := cfg.Validate(); err != nil {
+			m.state = stateSelector
+			m.selector = NewSelectorModel()
+			m.selector.width = m.width
+			m.selector.height = m.height
+			return m, m.selector.Init()
+		}
+
+		client := api.NewClient(cfg)
+		m.state = stateSend
+		m.send = NewSendModel(client, cfg)
+		m.send.width = m.width
+		m.send.height = m.height
+		return m, m.send.Init()
+
 	case "💻 Command Line Mode":
 		// Exit UI and run help command
 		m.shouldRunHelp = true
 		m.state = stateExit
 		return m, tea.Quit
 
-	case "🎨 Interactive Dashboard":
+	case "📊 Dashboard":
 		// Load config and transition to dashboard state
 		cfg, err := config.LoadConfig()
 		if err != nil {
@@ -239,6 +289,7 @@ func (m *LauncherModel) getHelpOutput() string {
 	output.WriteString("SMS.ir CLI - Command Line Mode\n\n")
 	output.WriteString("Available Commands:\n")
 	output.WriteString("  config    Configuration management\n")
+	output.WriteString("  send      Send SMS message\n")
 	output.WriteString("  credit    Show current credit balance\n")
 	output.WriteString("  lines     Show available lines\n")
 	output.WriteString("  menu      Launch interactive menu\n")
@@ -247,8 +298,9 @@ func (m *LauncherModel) getHelpOutput() string {
 	output.WriteString("  " + cmd + " [command]\n\n")
 	output.WriteString("Examples:\n")
 	output.WriteString("  " + cmd + " config set --api-key YOUR_KEY --line YOUR_LINE\n")
+	output.WriteString("  " + cmd + " send -m \"Hello\" -t \"09120000000,09121111111\"\n\n")
 	output.WriteString("  " + cmd + " credit\n")
-	output.WriteString("  " + cmd + " lines\n\n")
+	output.WriteString("  " + cmd + " lines\n")
 	output.WriteString("For more information, run: " + cmd + " --help\n\n")
 	output.WriteString("Press any key to exit...")
 

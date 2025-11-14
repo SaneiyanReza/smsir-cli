@@ -14,7 +14,7 @@ var linesCmd = &cobra.Command{
 	Long:  `Show list of available lines for sending SMS`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		client := api.NewClient(cfg)
-		
+
 		resp, err := client.GetLines()
 		if err != nil {
 			return fmt.Errorf("error getting lines: %w", err)
@@ -25,7 +25,7 @@ var linesCmd = &cobra.Command{
 		}
 
 		lines := []int64(resp.Data)
-		
+
 		if len(lines) == 0 {
 			fmt.Println("📞 No lines found")
 			return nil
@@ -35,11 +35,7 @@ var linesCmd = &cobra.Command{
 		for i, line := range lines {
 			fmt.Printf("  %d. %d\n", i+1, line)
 		}
-		
+
 		return nil
 	},
-}
-
-func init() {
-	// Note: linesCmd is added to rootCmd in root.go setupCommands() to control order
 }

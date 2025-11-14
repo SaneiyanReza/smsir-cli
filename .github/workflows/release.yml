@@ -1,0 +1,61 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build for all platforms
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Create bin directory
+        run: mkdir -p bin
+
+      # ---------- Windows ----------
+      - name: Build Windows
+        env:
+          GOOS: windows
+          GOARCH: amd64
+        run: |
+          go build -o bin/smsir-windows.exe ./cmd/smsir
+
+      # ---------- Linux ----------
+      - name: Build Linux
+        env:
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          go build -o bin/smsir-linux ./cmd/smsir
+
+      # ---------- macOS ----------
+      - name: Build macOS
+        env:
+          GOOS: darwin
+          GOARCH: amd64
+        run: |
+          go build -o bin/smsir-macos ./cmd/smsir
+
+      # ---------- Create Release ----------
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            bin/smsir-windows.exe
+            bin/smsir-linux
+            bin/smsir-macos
+          draft: false
+          prerelease: false
+          generate_release_notes: true

@@ -104,11 +104,11 @@ func (m Model) renderHeader() string {
 
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#F59E0B")). // SMS.ir yellow
+		Foreground(lipgloss.Color("#f7bd60")).
 		Align(lipgloss.Center)
 
 	subtitleStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FBBF24")). // Lighter yellow
+		Foreground(lipgloss.Color("#f7bd60")).
 		Align(lipgloss.Center).
 		Italic(true)
 
@@ -118,7 +118,7 @@ func (m Model) renderHeader() string {
 // renderLoading renders loading state
 func (m Model) renderLoading() string {
 	loadingStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFD93D")).
+		Foreground(lipgloss.Color("#f7bd60")).
 		Align(lipgloss.Center)
 
 	return loadingStyle.Render("Loading... ⏳")
@@ -160,16 +160,16 @@ func (m Model) renderContent() string {
 func (m Model) renderCreditBox() string {
 	boxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("#F59E0B")). // SMS.ir yellow
+		BorderForeground(lipgloss.Color("#f7bd60")).
 		Padding(1, 2).
 		Width(m.width - 4)
 
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#F59E0B")) // SMS.ir yellow
+		Foreground(lipgloss.Color("#f7bd60"))
 
 	valueStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFD93D")).
+		Foreground(lipgloss.Color("#ffffff")).
 		Bold(true)
 
 	title := "💰 Current Credit"
@@ -184,16 +184,16 @@ func (m Model) renderCreditBox() string {
 func (m Model) renderLinesBox() string {
 	boxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("#10B981")). // Green for lines
+		BorderForeground(lipgloss.Color("#f7bd60")).
 		Padding(1, 2).
 		Width(m.width - 4)
 
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#059669")) // Dark green
+		Foreground(lipgloss.Color("#f7bd60"))
 
 	lineStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#95E1D3"))
+		Foreground(lipgloss.Color("#ffffff"))
 
 	title := "📞 Available Lines"
 
@@ -215,7 +215,7 @@ func (m Model) renderLinesBox() string {
 // renderInstructions renders usage instructions
 func (m Model) renderInstructions() string {
 	instructionStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#95E1D3")).
+		Foreground(lipgloss.Color("#ffffff")).
 		Align(lipgloss.Center)
 
 	instructions := []string{

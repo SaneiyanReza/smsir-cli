@@ -88,11 +88,11 @@ func (m SelectorModel) View() string {
 func (m SelectorModel) renderHeader() string {
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#F59E0B")). // SMS.ir yellow
+		Foreground(lipgloss.Color("#f7bd60")).
 		Align(lipgloss.Center)
 
 	subtitleStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FBBF24")). // Lighter yellow
+		Foreground(lipgloss.Color("#f7bd60")).
 		Align(lipgloss.Center).
 		Italic(true)
 
@@ -105,7 +105,7 @@ func (m SelectorModel) renderHeader() string {
 // renderInstructions renders instructions
 func (m SelectorModel) renderInstructions() string {
 	instructionStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#6B7280")).
+		Foreground(lipgloss.Color("#9CA3AF")).
 		Align(lipgloss.Center)
 
 	instructions := []string{
@@ -128,11 +128,11 @@ func (m SelectorModel) renderChoices() string {
 		}
 
 		choiceStyle := lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#374151"))
+			Foreground(lipgloss.Color("#e5e7eb"))
 
 		if m.cursor == i {
 			choiceStyle = choiceStyle.
-				Foreground(lipgloss.Color("#F59E0B")). // SMS.ir yellow
+				Foreground(lipgloss.Color("#f7bd60")).
 				Bold(true)
 		}
 
@@ -149,8 +149,9 @@ func NewSelectorModel() SelectorModel {
 	return SelectorModel{
 		choices: []string{
 			"🔧 Configure API Key & Line Number",
+			"📤 Send SMS",
+			"📊 Dashboard",
 			"💻 Command Line Mode",
-			"🎨 Interactive Dashboard",
 		},
 		cursor: 0,
 	}

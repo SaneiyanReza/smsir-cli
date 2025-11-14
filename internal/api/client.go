@@ -105,6 +105,15 @@ func (c *Client) GetLines() (*APIResponse[LinesResponse], error) {
 	return parseResponse[LinesResponse](resp)
 }
 
+// SendBulk sends bulk SMS messages
+func (c *Client) SendBulk(req BulkSendRequest) (*APIResponse[BulkSendResponse], error) {
+	resp, err := c.doRequest("POST", "/send/bulk", req)
+	if err != nil {
+		return nil, err
+	}
+	return parseResponse[BulkSendResponse](resp)
+}
+
 // HandleAPIError handles API errors based on status codes
 func HandleAPIError(resp *http.Response) error {
 	switch resp.StatusCode {

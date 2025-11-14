@@ -88,7 +88,7 @@ func (m StartupModel) View() string {
 func (m StartupModel) renderLogo() string {
 	logoStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#F59E0B")). // SMS.ir yellow
+		Foreground(lipgloss.Color("#f7bd60")).
 		Align(lipgloss.Center)
 
 	logo := `
@@ -105,7 +105,7 @@ func (m StartupModel) renderLogo() string {
 // renderTagline renders the tagline
 func (m StartupModel) renderTagline() string {
 	taglineStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FBBF24")). // SMS.ir light yellow
+		Foreground(lipgloss.Color("#f7bd60")).
 		Align(lipgloss.Center).
 		Italic(true)
 
@@ -120,7 +120,7 @@ func (m StartupModel) renderProgress() string {
 	filled := int(float64(barWidth) * float64(m.progress) / 100.0)
 
 	barStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFD93D")).
+		Foreground(lipgloss.Color("#f7bd60")).
 		Align(lipgloss.Center)
 
 	bar := "[" + strings.Repeat("█", filled) + strings.Repeat("░", barWidth-filled) + "]"
@@ -132,7 +132,7 @@ func (m StartupModel) renderProgress() string {
 // renderLoading renders loading text
 func (m StartupModel) renderLoading() string {
 	loadingStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#95E1D3")).
+		Foreground(lipgloss.Color("#ffffff")).
 		Align(lipgloss.Center)
 
 	loadingTexts := []string{

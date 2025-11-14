@@ -22,6 +22,7 @@ This tool provides both interactive and command-line interfaces for:
 
 Quick Start:
   smsir config                    # Set API credentials
+  smsir send                      # Send SMS message
   smsir credit                    # Check your balance
   smsir lines                     # View available lines
   smsir menu                      # Launch interactive menu`,
@@ -56,8 +57,9 @@ func init() {
 	// Disable completion command
 	RootCmd.CompletionOptions.DisableDefaultCmd = true
 
-	// Add commands in desired order: config first, then credit/lines, menu last
-	// Note: Sub-commands (like config set/show/validate) are added in config.go
+	// Disable alphabetical sorting to maintain custom order
+	cobra.EnableCommandSorting = false
+
 	// Commands are added in setupCommands() to maintain custom order
 	setupCommands()
 }
@@ -66,6 +68,9 @@ func init() {
 func setupCommands() {
 	// Configuration first (most important)
 	RootCmd.AddCommand(configCmd)
+
+	// Send command
+	RootCmd.AddCommand(sendCmd)
 
 	// Then credit and lines
 	RootCmd.AddCommand(creditCmd)

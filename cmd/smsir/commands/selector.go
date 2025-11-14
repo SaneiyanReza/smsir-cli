@@ -12,7 +12,6 @@ var selectorCmd = &cobra.Command{
 	Short: "Launch interactive menu",
 	Long:  `Launch interactive menu with beautiful user interface to choose between different modes: dashboard with real-time updates, configuration setup, and command line operations. This provides an easy-to-use graphical interface for navigating all SMS.ir CLI features.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		// Use the launcher to ensure smooth return to selector
 		launcher := ui.NewLauncherModel()
 		p := tea.NewProgram(launcher, tea.WithAltScreen())
 
@@ -25,7 +24,6 @@ var selectorCmd = &cobra.Command{
 		// finalModel should be the same LauncherModel with updated state
 		if finalLauncher, ok := finalModel.(ui.LauncherModel); ok {
 			if finalLauncher.ShouldRunHelp() {
-				// Clear UI and run help command
 				RootCmd.SetArgs([]string{"--help"})
 				return RootCmd.Execute()
 			}
@@ -33,8 +31,4 @@ var selectorCmd = &cobra.Command{
 
 		return nil
 	},
-}
-
-func init() {
-	// Note: selectorCmd is added to rootCmd in root.go setupCommands() to control order
 }
