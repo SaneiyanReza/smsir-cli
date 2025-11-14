@@ -101,9 +101,15 @@ func (m ConfigModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "backspace":
 			if m.step == 0 && len(m.apiKey) > 0 {
-				m.apiKey = m.apiKey[:len(m.apiKey)-1]
+				runes := []rune(m.apiKey)
+				if len(runes) > 0 {
+					m.apiKey = string(runes[:len(runes)-1])
+				}
 			} else if m.step == 1 && len(m.lineNumber) > 0 {
-				m.lineNumber = m.lineNumber[:len(m.lineNumber)-1]
+				runes := []rune(m.lineNumber)
+				if len(runes) > 0 {
+					m.lineNumber = string(runes[:len(runes)-1])
+				}
 			}
 			return m, nil
 
@@ -167,7 +173,7 @@ func (m ConfigModel) View() string {
 func (m ConfigModel) renderHeader() string {
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#F59E0B")). // SMS.ir yellow
+		Foreground(lipgloss.Color("#f7bd60")).
 		Align(lipgloss.Center)
 
 	title := "🔧 Configuration Setup"
@@ -188,7 +194,7 @@ func (m ConfigModel) renderProgress() string {
 	}
 
 	progressStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#6B7280")).
+		Foreground(lipgloss.Color("#9CA3AF")).
 		Align(lipgloss.Center)
 
 	return progressStyle.Render(strings.Join(progress, " → "))
@@ -198,7 +204,7 @@ func (m ConfigModel) renderProgress() string {
 func (m ConfigModel) renderContent() string {
 	boxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("#F59E0B")). // SMS.ir yellow
+		BorderForeground(lipgloss.Color("#f7bd60")).
 		Padding(1, 2).
 		Width(m.width - 4)
 
@@ -220,10 +226,10 @@ func (m ConfigModel) renderContent() string {
 func (m ConfigModel) renderAPIKeyStep() string {
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#F59E0B")) // SMS.ir yellow
+		Foreground(lipgloss.Color("#f7bd60"))
 
 	inputStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#374151")).
+		Foreground(lipgloss.Color("#ffffff")).
 		Bold(true)
 
 	placeholderStyle := lipgloss.NewStyle().
@@ -245,10 +251,10 @@ func (m ConfigModel) renderAPIKeyStep() string {
 func (m ConfigModel) renderLineNumberStep() string {
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#F59E0B")) // SMS.ir yellow
+		Foreground(lipgloss.Color("#f7bd60"))
 
 	inputStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#374151")).
+		Foreground(lipgloss.Color("#ffffff")).
 		Bold(true)
 
 	placeholderStyle := lipgloss.NewStyle().
@@ -270,10 +276,10 @@ func (m ConfigModel) renderLineNumberStep() string {
 func (m ConfigModel) renderConfirmStep() string {
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#F59E0B")) // SMS.ir yellow
+		Foreground(lipgloss.Color("#f7bd60"))
 
 	infoStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#374151"))
+		Foreground(lipgloss.Color("#ffffff"))
 
 	title := "Confirm Configuration:"
 	apiKey := fmt.Sprintf("API Key: %s", maskString(m.apiKey))
@@ -287,7 +293,7 @@ func (m ConfigModel) renderConfirmStep() string {
 // renderInstructions renders instructions
 func (m ConfigModel) renderInstructions() string {
 	instructionStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#6B7280")).
+		Foreground(lipgloss.Color("#9CA3AF")).
 		Align(lipgloss.Center)
 
 	var instructions []string

@@ -29,7 +29,3 @@ var creditCmd = &cobra.Command{
 		return nil
 	},
 }
-
-func init() {
-	// Note: creditCmd is added to rootCmd in root.go setupCommands() to control order
-}
